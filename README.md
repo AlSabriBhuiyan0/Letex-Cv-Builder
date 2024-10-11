@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Latex-Based Online Cv Builder is a web application that enables users to create and customize their resumes using LaTeX. This project provides a user-friendly interface for resume creation, featuring real-time previews and PDF generation. It aims to simplify the resume-building process for individuals looking to present their qualifications in a professional format.
+The Latex-Based Online Cv Builder is a web application that enables users to create and customize their resumes using Latex. This project provides a user-friendly interface for resume creation, featuring real-time previews and PDF generation. It aims to simplify the resume-building process for individuals looking to present their qualifications in a professional format.
 
 ## Features
 
