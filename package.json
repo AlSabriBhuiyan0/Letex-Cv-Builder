@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node server/server.js",
-    "heroku-postbuild": "cd client && npm install --legacy-peer-deps && npm run build",
-    "build": "cd client && npm run build",
+    "heroku-postbuild": "cd client && npm install --legacy-peer-deps && set NODE_OPTIONS=--openssl-legacy-provider && npm run build",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "preinstall": "cd client && npm install"
   },
   "dependencies": {
