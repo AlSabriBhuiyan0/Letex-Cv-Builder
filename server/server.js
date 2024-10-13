@@ -3,7 +3,9 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './db/index.js';
-import authRouter from './routes/auth-routes.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const authRouter = require('./routes/auth-routes.js');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
