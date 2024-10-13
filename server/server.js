@@ -1,13 +1,18 @@
-const express = require("express");
-const cors = require("cors");
-const { exec } = require("child_process");
-const fs = require("fs");
-const path = require("path");
-const connectDB = require("./db/index.js");
-const authRouter = require("./routes/auth-routes.js");
+import express from 'express';
+import cors from 'cors';
+import { exec } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import connectDB from './db/index.js';
+import authRouter from './routes/auth-routes.js';
+import bcrypt from 'bcrypt'; // or 'bcryptjs' if you switched
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 5000;
-import bcrypt from 'bcrypt'; // or 'bcryptjs' if you switched
 
 // Middleware
 const corsOptions = {
@@ -54,6 +59,18 @@ app.post("/generate-pdf", (req, res) => {
   );
 });
 
+// Use the below route to use the auth feature
+app.use("/api/v1/auth", authRouter);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 // Connection to DB:
 connectDB()
   .then(() => {
@@ -66,15 +83,3 @@ connectDB()
     console.error("Failed to connect to MongoDB:", error);
     process.exit(1);
   });
-
-// Use the below route to use the auth feature
-app.use("/api/v1/auth", authRouter);
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
