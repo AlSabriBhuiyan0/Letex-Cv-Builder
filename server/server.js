@@ -7,6 +7,7 @@ const connectDB = require("./db/index.js");
 const authRouter = require("./routes/auth-routes.js");
 const app = express();
 const PORT = process.env.PORT || 5000;
+import bcrypt from 'bcrypt'; // or 'bcryptjs' if you switched
 
 // Middleware
 const corsOptions = {
