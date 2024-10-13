@@ -1,12 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import { exec } from 'child_process';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './db/index.js';
 import authRouter from './routes/auth-routes.js';
-import bcrypt from 'bcrypt'; // or 'bcryptjs' if you switched
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,7 +16,7 @@ const corsOptions = {
   origin: [
     "http://localhost:3000",
     "https://latex-resume-builder.vercel.app",
-    "https://git.heroku.com/latex-cv-builder.git",
+    "https://latex-cv-builder-f0e1b10b4d69.herokuapp.com",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
@@ -28,42 +25,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.post("/generate-pdf", (req, res) => {
-  const latexCode = req.body.latex;
-
-  const filePath = path.join(__dirname, "resume.tex");
-  const pdfPath = path.join(__dirname, "resume.pdf");
-  fs.writeFileSync(filePath, latexCode);
-  exec(
-    `pdflatex -interaction=nonstopmode ${filePath}`,
-    (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Error: ${stderr}`);
-        return res.status(500).send("Error generating PDF");
-      }
-      if (!fs.existsSync(pdfPath)) {
-        return res.status(500).send("PDF not generated");
-      }
-      res.download(pdfPath, "resume.pdf", (err) => {
-        if (err) {
-          console.error("Error downloading file:", err);
-        }
-        fs.unlink(filePath, (err) => {
-          if (err) console.error("Error deleting .tex file:", err);
-        });
-        fs.unlink(pdfPath, (err) => {
-          if (err) console.error("Error deleting .pdf file:", err);
-        });
-      });
-    }
-  );
-});
-
-// Use the below route to use the auth feature
+// Use the auth routes
 app.use("/api/v1/auth", authRouter);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/build')));
+
+// API routes
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from server!' });
+});
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
@@ -71,18 +42,20 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-// Connection to DB:
-connectDB()
-  .then(() => {
-    // Start the server after successful database connection
+// Connection to DB and start server
+const startServer = async () => {
+  try {
+    await connectDB();
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
-  })
-  .catch((error) => {
-    console.error("Failed to connect to MongoDB:", error);
+  } catch (error) {
+    console.error("Failed to start server:", error);
     process.exit(1);
-  });
+  }
+};
+
+startServer();
 
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
