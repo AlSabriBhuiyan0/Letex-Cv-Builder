@@ -1,11 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import connectDB from './db/index.js';
-import { createRequire } from 'module';
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./db/index.js";
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const authRouter = require('./routes/auth-routes.js');
+import authRouter from "./routes/auth-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,17 +31,17 @@ app.use(express.json());
 app.use("/api/v1/auth", authRouter);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 // API routes
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from server!' });
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from server!" });
 });
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 // Connection to DB and start server
@@ -59,12 +59,12 @@ const startServer = async () => {
 
 startServer();
 
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   process.exit(1);
 });
