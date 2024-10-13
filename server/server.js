@@ -10,7 +10,11 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://latex-resume-builder.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://latex-resume-builder.vercel.app",
+    "https://git.heroku.com/latex-cv-builder.git",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
   credentials: true,
@@ -50,11 +54,17 @@ app.post("/generate-pdf", (req, res) => {
 });
 
 // Connection to DB:
-connectDB();
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+connectDB()
+  .then(() => {
+    // Start the server after successful database connection
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to the database:", error);
+    process.exit(1);
+  });
 
 // Use the below route to use the auth feature
 app.use("/api/v1/auth", authRouter);
