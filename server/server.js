@@ -58,11 +58,11 @@ connectDB()
   .then(() => {
     // Start the server after successful database connection
     app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error("Failed to connect to the database:", error);
+    console.error("Failed to connect to MongoDB:", error);
     process.exit(1);
   });
 
