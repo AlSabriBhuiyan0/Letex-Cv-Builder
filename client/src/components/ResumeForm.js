@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 
