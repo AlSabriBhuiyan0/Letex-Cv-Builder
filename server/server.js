@@ -5,24 +5,13 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import latex from "node-latex";
 import fs from "fs";
-import { exec } from 'child_process';
 
-// Add these lines at the very top of your file
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-// Check LaTeX installation
-exec('pdflatex --version', (error, stdout, stderr) => {
-  if (error) {
-    console.error(`LaTeX error: ${error}`);
-    return;
-  }
-  console.log(`LaTeX version: ${stdout}`);
 });
 
 const __filename = fileURLToPath(import.meta.url);
