@@ -10,6 +10,7 @@
     "heroku-postbuild": "cd client && npm install --legacy-peer-deps && npm run build"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -19,7 +20,8 @@
     "katex": "^0.16.11",
     "latex-cv-builder": "file:",
     "mongoose": "^6.0.12",
-    "react-katex": "^3.0.1"
+    "react-katex": "^3.0.1",
+    "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
     "mocha": "^9.0.0"
