@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -18,22 +18,32 @@ const ResumeForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLatexInputChange = async (e) => {
-    const latexInput = e.target.value;
-    setFormData({ ...formData, latexInput });
-    
-    try {
-      const response = await axios.post(`${API_URL}/api/render-latex`, { latexInput });
-      setRenderedCV(response.data.renderedHTML);
-    } catch (error) {
-      console.error('Error rendering LaTeX:', error);
-      setError('Failed to render LaTeX. Please check your input.');
-    }
-  };
+  useEffect(() => {
+    const renderLatex = async () => {
+      if (formData.latexInput) {
+        setIsLoading(true);
+        try {
+          const response = await axios.post(`${API_URL}/api/render-latex`, { latexInput: formData.latexInput });
+          setRenderedCV(response.data.renderedHTML);
+        } catch (error) {
+          console.error('Error rendering LaTeX:', error);
+          setError('Failed to render LaTeX. Please check your input.');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    renderLatex();
+  }, [formData.latexInput]);
 
   const generateAndDownloadCV = async () => {
     if (previewRef.current) {
-      const canvas = await html2canvas(previewRef.current);
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2,
+        logging: false,
+        useCORS: true
+      });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF();
       const imgProps = pdf.getImageProperties(imgData);
@@ -68,7 +78,7 @@ const ResumeForm = () => {
           name="latexInput"
           placeholder="Enter your LaTeX CV content here..."
           value={formData.latexInput}
-          onChange={handleLatexInputChange}
+          onChange={handleChange}
           className="w-full p-2 h-64 mb-4 border rounded"
         />
         <button 
@@ -81,9 +91,7 @@ const ResumeForm = () => {
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
       <div className="w-full md:w-1/2 p-4">
-        <h2 className="text-xl font-bold mb-4">Live Preview</h2>
         <div ref={previewRef} className="border rounded p-4">
-          <h3 className="font-bold">LaTeX Preview:</h3>
           <div dangerouslySetInnerHTML={{ __html: renderedCV }} />
         </div>
       </div>
