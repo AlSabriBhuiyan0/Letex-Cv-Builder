@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from './components/Home';
-import ResumeForm from './components/ResumeForm';
 import Commands from './components/Commands';
 import "./index.css"; // This should contain the Tailwind directives
 import "./App.css"; // Your custom styles
@@ -15,7 +14,6 @@ function App() {
             <h1 className="text-2xl font-bold">LaTeX CV Builder</h1>
             <nav>
               <Link to="/" className="mr-4 hover:underline">Home</Link>
-              <Link to="/resume" className="mr-4 hover:underline">Resume</Link>
               <Link to="/commands" className="hover:underline">Commands</Link>
             </nav>
           </div>
@@ -23,7 +21,6 @@ function App() {
         <main className="container p-4 mx-auto mt-8">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/resume" element={<ResumeForm />} />
             <Route path="/commands" element={<Commands />} />
           </Routes>
         </main>
