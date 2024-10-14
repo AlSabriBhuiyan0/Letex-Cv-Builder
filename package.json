@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node server/server.js",
-    "heroku-postbuild": "cd client && npm install --legacy-peer-deps && npm run build",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
