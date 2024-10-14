@@ -14,18 +14,25 @@ const Home = () => {
   const generatePDF = () => {
     try {
       const doc = new jsPDF();
-      doc.setFontSize(18);
-      doc.text('Resume', 10, 10);
-      doc.setFontSize(12);
-      doc.text(`Name: ${data.name}`, 10, 20);
-      doc.text(`Email: ${data.email}`, 10, 30);
-      doc.text('LaTeX Content:', 10, 40);
-      doc.text(data.latexInput, 10, 50);
-      doc.save('resume.pdf');
+      let yPosition = 10;
+
+      if (data.name) {
+        doc.text(data.name, 10, yPosition);
+        yPosition += 10;
+      }
+      if (data.email) {
+        doc.text(data.email, 10, yPosition);
+        yPosition += 10;
+      }
+      if (data.latexInput) {
+        doc.text(data.latexInput, 10, yPosition);
+      }
+
+      doc.save('cv.pdf');
       setError(null);
     } catch (error) {
       console.error(error);
-      setError('Failed to generate resume. Please try again.');
+      setError('Failed to generate CV. Please try again.');
     }
   };
 
@@ -57,19 +64,21 @@ const Home = () => {
           onClick={generatePDF}
           className="p-2 w-full text-white bg-blue-500 rounded hover:bg-blue-600"
         >
-          Generate and Download Resume
+          Generate and Download CV
         </button>
         {error && <p className="mt-2 text-red-500">{error}</p>}
       </div>
       <div className="p-4 w-full md:w-1/2">
         <h2 className="mb-4 text-xl font-bold">Live Preview</h2>
         <div className="p-4 rounded border">
-          <h3 className="font-bold">Name: {data.name}</h3>
-          <p>Email: {data.email}</p>
-          <div className="mt-4">
-            <h4 className="font-bold">LaTeX Preview:</h4>
-            <BlockMath>{data.latexInput}</BlockMath>
-          </div>
+          {data.name && <h3 className="font-bold">{data.name}</h3>}
+          {data.email && <p>{data.email}</p>}
+          {data.latexInput && (
+            <div className="mt-4">
+              <h4 className="font-bold">LaTeX Preview:</h4>
+              <BlockMath>{data.latexInput}</BlockMath>
+            </div>
+          )}
         </div>
       </div>
     </div>
