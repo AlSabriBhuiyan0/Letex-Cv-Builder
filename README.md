@@ -70,6 +70,10 @@ Contributions are welcome! If you have suggestions for improvements or want to r
 3. Commit your changes (`git commit -m 'Add some feature'`).
 4. Push to the branch (`git push origin feature/YourFeature`).
 5. Open a pull request.
+SCREEN SHOTS BELOW OF OUTPUT
+![Final output 1](https://github.com/user-attachments/assets/14d4dfbd-617b-40ab-9325-f46e0e152d75)
+![Capture](https://github.com/user-attachments/assets/65c529fd-6dd0-483c-b2a3-3da9c0af9bc3)
+
 
 ## License
 
