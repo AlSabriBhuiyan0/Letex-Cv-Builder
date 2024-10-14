@@ -1,8 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SplitScreen from "./components/SplitScreen";
 import Navbar from "./components/Header";
 import LatexCommands from "./pages/Commands";
+import Commands from './components/Commands';
+import Home from './components/Home';
 import "./index.css"; // This should contain the Tailwind directives
 import "./App.css"; // Your custom styles
 
@@ -38,6 +40,10 @@ function App() {
           </div>
         </main>
       </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/commands" element={<Commands />} />
+      </Routes>
     </Router>
   );
 }
