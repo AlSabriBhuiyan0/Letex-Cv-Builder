@@ -16,9 +16,6 @@ function App() {
               <NavLink to="/" className={({ isActive }) => 
                 isActive ? "mr-4 underline" : "mr-4 hover:underline"
               }>Home</NavLink>
-              <NavLink to="/build" className={({ isActive }) => 
-                isActive ? "mr-4 underline" : "mr-4 hover:underline"
-              }>Build CV</NavLink>
               <NavLink to="/commands" className={({ isActive }) => 
                 isActive ? "underline" : "hover:underline"
               }>Commands</NavLink>
@@ -27,8 +24,7 @@ function App() {
         </header>
         <main className="container p-4 mx-auto mt-8">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/build" element={<ResumeForm />} />
+            <Route path="/" element={<ResumeForm />} />
             <Route path="/commands" element={<Commands />} />
           </Routes>
         </main>

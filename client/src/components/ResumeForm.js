@@ -46,15 +46,15 @@ const ResumeForm = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-4 w-full md:w-1/2">
-        <h2 className="mb-4 text-xl font-bold">LaTeX CV Builder</h2>
+      <div className="w-full md:w-1/2 p-4">
+        <h2 className="text-xl font-bold mb-4">LaTeX CV Builder</h2>
         <input 
           type="text" 
           name="name" 
           placeholder="Your Name" 
           value={formData.name}
           onChange={handleChange} 
-          className="p-2 mb-4 w-full rounded border"
+          className="w-full p-2 mb-4 border rounded"
         />
         <input 
           type="email" 
@@ -62,27 +62,27 @@ const ResumeForm = () => {
           placeholder="Your Email" 
           value={formData.email}
           onChange={handleChange} 
-          className="p-2 mb-4 w-full rounded border"
+          className="w-full p-2 mb-4 border rounded"
         />
         <textarea
           name="latexInput"
           placeholder="Enter your LaTeX CV content here..."
           value={formData.latexInput}
           onChange={handleLatexInputChange}
-          className="p-2 mb-4 w-full h-64 rounded border"
+          className="w-full p-2 h-64 mb-4 border rounded"
         />
         <button 
           onClick={generateAndDownloadCV}
           disabled={isLoading}
-          className="p-2 w-full text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-400"
+          className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-400"
         >
           Generate and Download CV
         </button>
-        {error && <p className="mt-2 text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
-      <div className="p-4 w-full md:w-1/2">
-        <h2 className="mb-4 text-xl font-bold">Live Preview</h2>
-        <div ref={previewRef} className="p-4 rounded border">
+      <div className="w-full md:w-1/2 p-4">
+        <h2 className="text-xl font-bold mb-4">Live Preview</h2>
+        <div ref={previewRef} className="border rounded p-4">
           <h3 className="font-bold">LaTeX Preview:</h3>
           <div dangerouslySetInnerHTML={{ __html: renderedCV }} />
         </div>
