@@ -39,12 +39,12 @@ ${latexInput}
 \\end{document}
   `;
 
-  const output = path.join(__dirname, 'output.pdf');
+  const output = path.join('/tmp', 'output.pdf');
   const options = {
     inputs: path.join(__dirname, 'inputs'),
     cmd: 'pdflatex',
     passes: 1,
-    errorLogs: path.join(__dirname, 'errors.log'),
+    errorLogs: path.join('/tmp', 'errors.log'),
   };
 
   latex(input, options).pipe(fs.createWriteStream(output))
@@ -90,6 +90,21 @@ app.get('/check-latex', (req, res) => {
 // match one above, send back React's index.html file.
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Global error handlers
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 const PORT = process.env.PORT || 5000;
