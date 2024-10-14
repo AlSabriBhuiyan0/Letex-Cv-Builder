@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import 'katex/dist/katex.min.css';
-import { BlockMath } from 'react-katex';
+import { BlockMath, InlineMath } from 'react-katex';
 
 const SplitScreen = () => {
     const [latexCode, setLatexCode] = useState('');
@@ -17,9 +17,22 @@ const SplitScreen = () => {
             const canvas = await html2canvas(previewRef.current);
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF();
-            pdf.addImage(imgData, 'PNG', 0, 0);
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
             pdf.save("latex-document.pdf");
         }
+    };
+
+    const renderLatex = (text) => {
+        const parts = text.split(/(\$.*?\$)/);
+        return parts.map((part, index) => {
+            if (part.startsWith('$') && part.endsWith('$')) {
+                return <InlineMath key={index}>{part.slice(1, -1)}</InlineMath>;
+            }
+            return part;
+        });
     };
 
     return (
@@ -36,8 +49,8 @@ const SplitScreen = () => {
             
             <div className="overflow-y-auto flex-1 p-4 border-r">
                 <h2 className="mb-2 text-xl font-bold">Live Preview</h2>
-                <div ref={previewRef} className="overflow-hidden p-4 h-full whitespace-normal break-words rounded border latex-preview">
-                    <BlockMath>{latexCode}</BlockMath>
+                <div ref={previewRef} className="overflow-hidden p-4 h-full whitespace-pre-wrap break-words rounded border latex-preview">
+                    {renderLatex(latexCode)}
                 </div>
                 <button
                     onClick={generatePDF}
