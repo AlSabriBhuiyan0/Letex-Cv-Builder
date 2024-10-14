@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import latex from "node-latex";
 import fs from "fs";
+import { exec } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,16 +59,31 @@ ${latexInput}
     })
     .on('error', (err) => {
       console.error('LaTeX Error:', err);
-      res.status(500).json({ error: 'Failed to render LaTeX', details: err.message });
+      console.error('Error stack:', err.stack);
+      console.error('LaTeX input:', input);
+      res.status(500).json({ error: 'Failed to render LaTeX', details: err.message, stack: err.stack });
     });
 });
 
 // Your existing API route
 app.post('/api/resume', (req, res) => {
-  // Handle the resume data and return the necessary information
-  // This is just an example, adjust according to your actual implementation
   const { name, email } = req.body;
   res.json({ name, email, message: 'Resume data received successfully' });
+});
+
+// Add this route to check LaTeX installation
+app.get('/check-latex', (req, res) => {
+  exec('pdflatex --version', (error, stdout, stderr) => {
+    if (error) {
+      res.send(`LaTeX not found: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      res.send(`LaTeX error: ${stderr}`);
+      return;
+    }
+    res.send(`LaTeX version: ${stdout}`);
+  });
 });
 
 // The "catchall" handler: for any request that doesn't
