@@ -1,23 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SplitScreen from './components/SplitScreen';
-import Navbar from './components/Header';
-import LatexCommands from './pages/Commands';
-import './index.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SplitScreen from "./components/SplitScreen";
+import Navbar from "./components/Header";
+import LatexCommands from "./pages/Commands";
+import "./index.css"; // This should contain the Tailwind directives
+import "./App.css"; // Your custom styles
 
 function App() {
-    return (
-        <Router>
-            <div className="App">
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<SplitScreen />} /> {/* Home page */}
-                    <Route path="/commands" element={<LatexCommands />} /> {/* Latex Commands page */}
-                    {/* Add more routes as you need later */}
-                </Routes>
-            </div>
-        </Router>
-    );
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<SplitScreen />} /> {/* Home page */}
+          <Route path="/commands" element={<LatexCommands />} />{" "}
+          {/* Latex Commands page */}
+          {/* Add more routes as you need later */}
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
