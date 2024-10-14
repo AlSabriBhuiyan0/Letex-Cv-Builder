@@ -6,6 +6,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@react-pdf/renderer": "^4.0.0",
     "axios": "^1.7.7",
+    "client": "file:",
     "html-to-react": "^1.7.0",
     "jspdf": "^2.5.2",
     "katex": "^0.16.11",
