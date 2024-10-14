@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, NavLink } from "react-router-dom";
-import Home from './components/Home';
-import Commands from './components/Commands';
 import ResumeForm from './components/ResumeForm';
+import Commands from './components/Commands';
 import "./index.css"; // This should contain the Tailwind directives
 import "./App.css"; // Your custom styles
 
