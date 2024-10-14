@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
+// Update this line with your actual Heroku app URL
 const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://your-heroku-app-url.herokuapp.com'
+  ? 'https://latex-cv-builder-f0e1b10b4d69.herokuapp.com'
   : 'http://localhost:5000';
 
 const ResumeForm = () => {
@@ -12,7 +11,6 @@ const ResumeForm = () => {
   const [renderedCV, setRenderedCV] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const previewRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +20,9 @@ const ResumeForm = () => {
     const renderLatex = async () => {
       if (formData.latexInput) {
         setIsLoading(true);
+        setError(null);
         try {
-          const response = await axios.post(`${API_URL}/api/render-latex`, { latexInput: formData.latexInput });
+          const response = await axios.post(`${API_URL}/api/render-latex`, formData);
           setRenderedCV(response.data.renderedHTML);
         } catch (error) {
           console.error('Error rendering LaTeX:', error);
@@ -34,24 +33,15 @@ const ResumeForm = () => {
       }
     };
 
-    renderLatex();
-  }, [formData.latexInput]);
+    const debounce = setTimeout(() => {
+      renderLatex();
+    }, 500);
+
+    return () => clearTimeout(debounce);
+  }, [formData]);
 
   const generateAndDownloadCV = async () => {
-    if (previewRef.current) {
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        logging: false,
-        useCORS: true
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('cv.pdf');
-    }
+    // Implement PDF generation and download here
   };
 
   return (
@@ -91,8 +81,13 @@ const ResumeForm = () => {
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
       <div className="w-full md:w-1/2 p-4">
-        <div ref={previewRef} className="border rounded p-4">
-          <div dangerouslySetInnerHTML={{ __html: renderedCV }} />
+        <h2 className="text-xl font-bold mb-4">Live Preview</h2>
+        <div className="border rounded p-4">
+          {isLoading ? (
+            <p>Loading preview...</p>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: renderedCV }} />
+          )}
         </div>
       </div>
     </div>
